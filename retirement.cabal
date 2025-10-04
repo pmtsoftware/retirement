@@ -31,7 +31,9 @@ library
       Db
       Homepage
       Lib
+      Retirement
       Session
+      Simulation
       Types
       Users
   other-modules:

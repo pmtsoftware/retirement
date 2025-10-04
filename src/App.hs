@@ -6,7 +6,7 @@ module App
 import Common
 
 import Users
-import Homepage
+import Retirement
 import Db
 
 import qualified Web.Scotty.Trans as Scotty
@@ -52,11 +52,10 @@ application = do
         Scotty.matchAny staticRoute sApp
         Scotty.get "/" $ do
             ensureSession
-            checksum <- lift $ asks cssChecksum
-            logInfo "GET home page"
-            Scotty.html $ renderHomepage checksum
+            Scotty.redirect "/retirement/new-simulation"
         users
         auth
+        retirement
     where
         staticRoute = Scotty.regex "^/static/(.*)"
         sApp = Scotty.nested $ staticApp $ defaultWebAppSettings "."

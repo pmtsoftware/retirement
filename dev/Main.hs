@@ -24,7 +24,7 @@ type Clients = MVar [(SystemTime, Chan DevEvent)]
 
 main :: IO ()
 main = do
-    pd <- createProcess $ shell "stack exec retirement-exe"
+    pd <- createProcess $ shell "stack exec retirement-exe -- app"
     box <- newMVar pd
     output <- readCreateProcess (shell "stack path --local-install-root") ""
     let outs = lines $ toText output
@@ -50,7 +50,7 @@ watchAppExe dir box connsBox = withManager $ \mgr -> do
             putStrLn "Killing retirement-exe..."
             cleanupProcess pd
             putStrLn "Starting retirement-exe..."
-            pd' <- createProcess $ shell "stack exec retirement-exe"
+            pd' <- createProcess $ shell "stack exec retirement-exe -- app"
             _ <- putMVar box pd'
             conns <- takeMVar connsBox
             forM_ conns $ \(_, clientEvents) -> do
