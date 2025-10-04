@@ -79,6 +79,7 @@ executables:
     dependencies:
     - retirement
     - optparse-applicative
+    - postgresql-simple
   retirement-dev:
     main:                Main.hs
     source-dirs:         dev

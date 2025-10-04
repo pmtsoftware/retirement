@@ -126,6 +126,7 @@ executable retirement-exe
     , dotenv
     , envy
     , optparse-applicative
+    , postgresql-simple
     , relude
     , retirement
   default-language: Haskell2010
