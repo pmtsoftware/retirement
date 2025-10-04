@@ -3,6 +3,8 @@
 module Session
 ( auth
 , ensureSession
+, ensureSession'
+, SessionData(..)
 ) where
 
 import Common
@@ -152,3 +154,18 @@ ensureSession = do
         decodeSession :: ByteString -> Maybe SessionData
         decodeSession = rightToMaybe . Bin.decode @SessionData
 
+
+ensureSession' :: ActionT App SessionData
+ensureSession' = do
+    k <- lift $ asks sessionKey
+    encrypted <- Cookie.getCookie "swf-session"
+    let decrypted = encrypted >>= Sess.decrypt k . encodeUtf8
+        maybeSessionData = decrypted >>= decodeSession
+    -- whenNothing_ maybeSessionData $ Scotty.redirect "/login"
+    maybe unauthorized pure maybeSessionData
+    where
+        decodeSession :: ByteString -> Maybe SessionData
+        decodeSession = rightToMaybe . Bin.decode @SessionData
+
+        unauthorized :: Handler SessionData
+        unauthorized = Scotty.redirect "/login"

@@ -67,6 +67,7 @@ library:
   - base16-bytestring
   - fmt
   - validation
+  - bytestring
 
 executables:
   retirement-exe:

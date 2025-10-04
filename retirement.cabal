@@ -34,6 +34,7 @@ library
       Retirement
       Session
       Simulation
+      SimulationTypes
       Types
       Users
   other-modules:
@@ -54,6 +55,7 @@ library
       base >=4.7 && <5
     , base16-bytestring
     , blaze-html
+    , bytestring
     , cereal
     , cereal-text
     , clientsession

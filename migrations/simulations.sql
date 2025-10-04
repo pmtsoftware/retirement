@@ -1,0 +1,19 @@
+ALTER TABLE users ADD CONSTRAINT users_pkey PRIMARY KEY (id);
+
+CREATE TABLE simulations (
+    id BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+    user_id BIGINT REFERENCES users (id) NOT NULL,
+    age INTEGER NOT NULL,
+    sex TEXT NOT NULL,
+    work_start INTEGER NOT NULL,
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT NULL
+);
+
+CREATE TABLE simulation_params (
+    id BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+    simulation_id BIGINT REFERENCES simulations (id) NOT NULL,
+    work_end INTEGER NOT NULL,
+    salary NUMERIC(6, 2) NOT NULL,
+    expected_salary NUMERIC(6, 2) NOT NULL,
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT NULL
+);
