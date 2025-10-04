@@ -12,6 +12,16 @@
     --red-950: #450a0a;
 }
 
+input[type="range"] {
+    -webkit-appearance: none;
+    margin-right: 15px;
+    width: 200px;
+    height: 7px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 5px;
+    background-repeat: no-repeat;
+}
+
 body {
     /*background-color: red;*/
 }

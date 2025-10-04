@@ -15,6 +15,7 @@ import qualified Web.Scotty.Trans as Scotty
 import Web.Scotty.Trans (ScottyT)
 import Text.Blaze.Html5
 import Text.Blaze.Html5.Attributes hiding (title, form, label)
+import qualified Text.Blaze.Html5.Attributes as Attr
 import Text.Blaze.Html.Renderer.Text
 import Fmt.Internal.Numeric (baseF)
 
@@ -92,10 +93,34 @@ dashboardHandler = do
     AppEnv{..} <- lift ask
     Simulation{..} <- liftIO $ withResource connPool $ \conn -> getSimulation conn paramId
     Scotty.html . renderHtml $ layout $ do
-        h1 "Wynik symulacji"
-        div $ toMarkup simAge
-        div $ toMarkup simSex
-        div $ toMarkup simWorkStart
+        table $ do
+            caption $ h2 "Wynik symulacji"
+            tbody $ do
+                tr $ do
+                    th ! scope "row" $ "Płeć"
+                    td $ toMarkup simSex
+                tr $ do
+                    th ! scope "row" $ "Wiek"
+                    td $ toMarkup simAge
+                tr $ do
+                    th ! scope "row" $ "Wiek rozpoczęcia pracy"
+                    td $ toMarkup simWorkStart
+                tr $ do
+                    th ! scope "row" $ "Prognozowana emerytura"
+                    td "3 567"
+                        -- input ! type_ "range" ! Attr.min "1000" ! Attr.max "10000" ! step "100"
+        hr
+        form $ do
+            label $ do
+                "Planowany wiek zakończenia pracy"
+                input ! required "required" ! name "end_age" ! type_ "number" ! step "1" ! value "65"
+            label $ do
+                "Wynagrodzenie"
+                input ! required "required" ! name "salary" ! type_ "number" ! step "1" ! value "4000"
+            label $ do
+                "Oczekiwana wysokość emerytury"
+                input ! required "required" ! name "expected_salary" ! type_ "number" ! step "1" ! value "2000"
+            button ! type_ "submit" $ "Przelicz ponownie"
 
 getSimulation :: Connection -> SimulationId -> IO Simulation
 getSimulation conn simId = do
