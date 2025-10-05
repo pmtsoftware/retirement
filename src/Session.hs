@@ -149,7 +149,7 @@ ensureSession = do
     encrypted <- Cookie.getCookie "swf-session"
     let decrypted = encrypted >>= Sess.decrypt k . encodeUtf8
         maybeSessionData = decrypted >>= decodeSession
-    whenNothing_ maybeSessionData $ Scotty.redirect "/login"
+    whenNothing_ maybeSessionData $ Scotty.redirect "/retirement/new-simulation"
     where
         decodeSession :: ByteString -> Maybe SessionData
         decodeSession = rightToMaybe . Bin.decode @SessionData
@@ -168,4 +168,4 @@ ensureSession' = do
         decodeSession = rightToMaybe . Bin.decode @SessionData
 
         unauthorized :: Handler SessionData
-        unauthorized = Scotty.redirect "/login"
+        unauthorized = Scotty.redirect "/retirement/new-simulation"
