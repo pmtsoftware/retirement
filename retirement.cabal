@@ -71,6 +71,7 @@ library
     , postgresql-simple
     , relude
     , resource-pool
+    , scientific
     , scotty
     , time
     , unliftio

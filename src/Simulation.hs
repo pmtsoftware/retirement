@@ -1,11 +1,9 @@
-module Simulation where
+module Simulation (simulate) where
 
 import Relude
 
 import SimulationTypes
 
-import Web.Scotty.Trans
-import qualified Data.Text.Lazy             as T
 import GHC.Float (int2Double)
 
 minAge :: Sex -> Int

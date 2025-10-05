@@ -7,12 +7,13 @@ module SimulationTypes where
 import Relude
 
 import Web.Scotty.Trans
-import qualified Data.Text.Lazy as T
+import qualified Data.Text.Lazy as LT
+import qualified Data.Text as T
 import Data.ByteString.Char8 (unpack)
 import Database.PostgreSQL.Simple.FromRow
 import Database.PostgreSQL.Simple.FromField
 import Database.PostgreSQL.Simple.ToField
-import Database.PostgreSQL.Simple.FromField (Format(Text))
+import Data.Scientific (Scientific)
 
 data Sex = Male | Female
     deriving (Show, Eq, Generic)
@@ -22,6 +23,14 @@ instance Parsable Sex where
 
 parseSex :: LText -> Either LText Sex
 parseSex t
+        | t' == LT.toCaseFold "male" = Right Male
+        | t' == LT.toCaseFold "female" = Right Female
+        | otherwise = Left "parseParam Sex: unsupported value"
+        where
+        t' = LT.toCaseFold t
+
+parseSex' :: Text -> Either Text Sex
+parseSex' t
         | t' == T.toCaseFold "male" = Right Male
         | t' == T.toCaseFold "female" = Right Female
         | otherwise = Left "parseParam Sex: unsupported value"
@@ -54,14 +63,23 @@ data Simulation = Simulation
     , simAge :: !Int
     , simSex :: !Text
     , simWorkStart :: !Int
+    , simWorkEnd :: !Int
+    , simSalary :: !Scientific
+    , simExpectedSalary :: !Scientific
     }
     deriving (Show, Generic)
 
 instance FromRow Simulation where
-    fromRow = Simulation <$> field <*> field <*> field <*> field
+    fromRow = Simulation <$> field <*> field <*> field <*> field <*> field <*> field <*> field
+
+newtype ParameterId = ParameterId { unParameterId :: Int64 }
+    deriving (Show, Eq, Generic)
+deriving newtype instance FromField ParameterId
+deriving newtype instance ToField ParameterId
 
 data Params = Params
     { paramSalary :: !Double
     , paramExpectedSalary :: !Double
     , paramWorkEnd :: !Int
     }
+    deriving (Show, Generic)
