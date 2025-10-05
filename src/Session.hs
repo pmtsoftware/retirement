@@ -125,7 +125,7 @@ login = do
                         sessionBS = Bin.encode session
                     encrypted <- liftIO $ Sess.encryptIO k  sessionBS
                     Cookie.setSimpleCookie "swf-session" $ decodeUtf8 encrypted
-                    Scotty.redirect "/login-successed"
+                    Scotty.redirect "/retirement/new-simulation"
                 PasswordCheckFail -> do
                     lift . logErrorN $ "Invalid password"
                     [Only fla'] <- queryDb @(Only Text) @(Only Int) updateFLA $ Only userEmail
@@ -149,7 +149,7 @@ ensureSession = do
     encrypted <- Cookie.getCookie "swf-session"
     let decrypted = encrypted >>= Sess.decrypt k . encodeUtf8
         maybeSessionData = decrypted >>= decodeSession
-    whenNothing_ maybeSessionData $ Scotty.redirect "/retirement/new-simulation"
+    whenNothing_ maybeSessionData $ Scotty.redirect "/login"
     where
         decodeSession :: ByteString -> Maybe SessionData
         decodeSession = rightToMaybe . Bin.decode @SessionData
@@ -161,11 +161,10 @@ ensureSession' = do
     encrypted <- Cookie.getCookie "swf-session"
     let decrypted = encrypted >>= Sess.decrypt k . encodeUtf8
         maybeSessionData = decrypted >>= decodeSession
-    -- whenNothing_ maybeSessionData $ Scotty.redirect "/login"
     maybe unauthorized pure maybeSessionData
     where
         decodeSession :: ByteString -> Maybe SessionData
         decodeSession = rightToMaybe . Bin.decode @SessionData
 
         unauthorized :: Handler SessionData
-        unauthorized = Scotty.redirect "/retirement/new-simulation"
+        unauthorized = Scotty.redirect "/login"
