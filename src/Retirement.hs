@@ -159,10 +159,18 @@ simulationResult oob Simulation{..} = table ! id "results" !? (oob, hx_oob) $ do
         tr $ do
             th ! scope "row" $ "Prognozowana emerytura"
             td $ toMarkup (fixedF 2 simValue) <> " zł"
+        tr $ do
+            td ! colspan "2" $ comment simValue (toRealFloat simExpectedSalary) simulatedAge
     where
-        simValue = simulate Female (toRealFloat simSalary) simWorkStart simWorkEnd
+        f = simulate Female (toRealFloat simSalary) simWorkStart
+        simValue = f simWorkEnd
+        simulatedAge = simulateAge f (simWorkEnd + 1) $ toRealFloat simExpectedSalary
         hx_oob = customAttribute "hx-swap-oob" "true"
 
+        comment :: Double -> Double -> Int -> Html
+        comment simulatedSalary expectedSalary simulatedAge
+            | simulatedSalary >= expectedSalary = code "😀 Wyliczona kwota jest równa lub większa od spodziewanej!"
+            | otherwise = code $ "😟 Niestety aby osiągnąć spodziewaną kwotę emerytury będziesz musiał pracowac do " <> toMarkup simulatedAge <> " lat!"
 
 getSimulation :: Connection -> SimulationId -> IO Simulation
 getSimulation conn simId = do

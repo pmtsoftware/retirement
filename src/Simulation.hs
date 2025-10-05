@@ -1,4 +1,4 @@
-module Simulation (simulate) where
+module Simulation (simulate, simulateAge) where
 
 import Relude
 
@@ -31,3 +31,9 @@ simulate sex salary start end = foldl' f 0 parts / int2Double (avgLifespan sex)
         f acc x = (acc + x) * cpiRatio
         allYears = if end > start then end - start else 0
         parts = replicate allYears $ calc (salary*12)
+
+simulateAge :: (Int -> Double) -> Int -> Double -> Int
+simulateAge f startAge expectedSalary = fst . head $ fromMaybe ((0, 0) :| []) xs'
+    where
+        xs = [(x, f x) | x <- [startAge..]]
+        xs' = nonEmpty $ dropWhile (\(_, y) -> y < expectedSalary) xs
