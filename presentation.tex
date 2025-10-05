@@ -1,0 +1,90 @@
+\documentclass{beamer}
+\usepackage{polski}
+\usepackage[polish]{babel}
+\usepackage{array}
+\usepackage{booktabs}
+\usepackage{xcolor}
+
+\usetheme{metropolis}
+% \usecolortheme{spruce}
+
+% \setbeamercolor{alerted text}{fg=red}
+\setbeamertemplate{frame numbering}[fraction]
+
+\title{Symulator emerytalny}
+\subtitle{Symulator umożliwia obliczenie przybliżonej emerytury}
+
+\author{Przemek Matuszny}
+\date{05-10-2025}
+
+\setbeamercovered{transparent=15}
+
+\institute{Team: PMTS}
+
+\begin{document}
+    \maketitle
+
+    \begin{frame}[t]{Parametry symulacji - użytkownika} \vspace{4pt}
+        \begin{itemize}
+            \item Wiek
+            \item Płeć
+            \item Wiek rozpoczęcia pracy
+            \item Planowany wiek zakończenia pracy
+            \item Wynagrodzenie
+            \item Oczekiwana przez nas wartość emerytury
+        \end{itemize}
+    \end{frame}
+
+    \begin{frame}[t]{Parametry symulacji - systemowe} \vspace{4pt}
+        \begin{itemize}
+            \item Wiek emerytalny kobiet/mężczyzn = 63/65
+            \item Współczynnik składki ZUS = 17,2\%
+            \item Współczynnik cpi waloryzacji składki = 1.05
+            \item Średni czas życia = 76 lat
+        \end{itemize}
+        Parametrów systemowych nie można zmieniać - są stałe dla wszystkich symulacji.
+    \end{frame}
+
+    \begin{frame}[t]{Przebieg symulacji} \vspace{4pt}
+        Przyszła emerytura wyliczana jest wg wzoru:
+
+        \begin{equation}
+            E_{n} = \sum_{i=1}^{n} \frac{S_i}{l}
+        \end{equation}
+
+        Gdzie:
+        \begin{itemize}
+            \item $ E_{n} $ - szacowana wielkość emerytury
+            \item $ S_{i} $ - zwaloryzowana składka
+            \item $ l $ - średnia długość życia
+        \end{itemize}
+        Dla uproszczenia brak podziału na konto główne i subkonto.
+    \end{frame}
+
+    \begin{frame}[t]{Aplikacja} \vspace{4pt}
+        \begin{itemize}
+            \item Aplikacja webowa - napisana w języku Haskell z wykorzystaniem bazy danych PostgreSQL
+            \item Po zalogowaniu się użytkownik wprowadza parametry symulacji
+            \item Po kliknięci przycisku \textit{Start} prezentowane jest okno z wynikami symulacji.
+            \item Z poziomu tego okna możliwa jest zmiana parametrów i ponowne przeliczenie
+            \item Dostępna jest też opcja wyświetlenia histori gdzie prezentowane są w formie tabeli wszystkie symulacje
+        \end{itemize}
+    \end{frame}
+
+    \begin{frame}[t]{Demo} \vspace{4pt}
+
+        Demo dostępne jest pod adresem \href{https://sim.hack.pmtsoftware.eu}{https://sim.hack.pmtsoftware.eu}
+        Wymagane jest logowanie.
+        \begin{itemize}
+            \item użytkownik: \textit{demo@example.com}
+            \item hasło: \textit{HackYeah2025}
+        \end{itemize}
+        Źródła do pobrania \href{https://github.com/pmtsoftware/retirement}{https://github.com/pmtsoftware/retirement}
+
+    \end{frame}
+
+    \begin{frame}[standout]
+        Pytania?
+    \end{frame}
+
+\end{document}
