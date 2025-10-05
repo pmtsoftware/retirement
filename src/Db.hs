@@ -14,4 +14,5 @@ migrateDb conn = runMigrations conn defaultOptions
     , MigrationFile "email_unique.sql" "./migrations/email_unique.sql"
     , MigrationFile "simulations.sql" "./migrations/simulations.sql"
     , MigrationFile "params.sql" "./migrations/params.sql"
+    , MigrationFile "fix_salary.sql" "./migrations/fix_salary.sql"
     ]
